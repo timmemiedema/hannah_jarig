@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hannah's feestje</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #wheel-container {
+            position: relative;
+            display: inline-block;
+        }
+        #wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 5px solid #333;
+            position: relative;
+            margin: 50px auto;
+            transition: transform 18s cubic-bezier(0.25, 1, 0.5, 1);
+            background: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sector {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            clip-path: polygon(100% 50%, 50% 100%, 0 50%, 50% 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .sector:nth-child(1) { transform: rotate(0deg) translateX(90px) rotate(0deg); }
+        .sector:nth-child(2) { transform: rotate(120deg) translateX(90px) rotate(-120deg); }
+        .sector:nth-child(3) { transform: rotate(240deg) translateX(90px) rotate(-240deg); }
+        #arrow {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%) rotate(0deg);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid red;
+        }
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #wheel img {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hannah's feestje</h1>
+    <div id="wheel-container">
+        <div id="arrow"></div>
+        <div id="wheel">
+            <div class="sector">Cadeau 1</div>
+            <div class="sector">Cadeau 2</div>
+            <div class="sector">Cadeau 3</div>
+            <img src='Ludo-modified-removebg-preview.png' alt='' id='centerImage'>
+        </div>
+    </div>
+    <button onclick="spinWheel()" id="spinButton">Draai het rad</button>
+    <p id="result"></p>
+
+    <script>
+        const options = [
+            "Zaterdag 14 juni - Rome",
+            "Vrijdag 4 juli - Londen",
+            "Vrijdag 11 juli - Edinburgh"
+        ];
+
+        let spinning = false;
+
+        function spinWheel() {
+            if (spinning) return;
+            spinning = true;
+            document.getElementById("result").style.display = "none";
+            document.getElementById("centerImage").style.display = "none";
+            
+            const randomIndex = Math.floor(Math.random() * options.length);
+            const angle = 360 * 30 + (randomIndex * 120); // 10 volledige draaien plus de juiste optie
+            
+            document.getElementById("wheel").style.transition = 'transform 18s cubic-bezier(0.25, 1, 0.5, 1)';
+            document.getElementById("wheel").style.transform = `rotate(${angle}deg)`;
+            
+            setTimeout(() => { 
+                document.getElementById("wheel").style.transition = 'none';
+                const details = options[randomIndex].split(' - ');
+                document.getElementById("result").innerText = `Gefeliciteerd, je gaat op ${details[0]} naar een concert van Ludovico in ${details[1]} (maar je mag nog wisselen).`;
+                document.getElementById("centerImage").style.display = "block";
+                document.getElementById("result").style.display = "block";
+                spinning = false;
+            }, 18000);
+        }
+    </script>
+</body>
+</html>
